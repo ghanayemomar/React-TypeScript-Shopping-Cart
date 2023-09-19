@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { ShoppingCart } from "./../components/ShoppingCart";
-
+import { useLoocalStorage } from "../hooks/useLocalStorage";
+import { CartItem } from "./../components/CartItem";
 type ShoppingCartProviderProps = {
   children: ReactNode;
 };
@@ -29,10 +30,10 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
- 
-
+  const [cartItems, setCartItems] = useLoocalStorage<CartItem[]>(
+    "shopping-cart",
+    []
+  );
   function getItemQuantity(id: number) {
     return cartItems.find((item) => item.id === id)?.quantity || 0;
   }
